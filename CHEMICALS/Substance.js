@@ -1,12 +1,17 @@
-var heated : Transform;
-var cooled : Transform;
-var relativeWeight : float;
-var id : int; 
+var deployWithForce : boolean;
+var phase : int;
+var relativeWeights : float[];
+var gasTransition : float;
+var solidTransition : float;
+var id : String; 
 var reactive : boolean = false;
 var dissipateTime : float;
 var randomVertical : boolean = false;
 var randomHorizontal : boolean = false;
 var randomSpeed : float;
+var compoundID : String;
+private var currentTemperature = 0;
+private var relativeWeight = relativeWeights[phase];
 
 function Start(){
 	yield new WaitForSeconds(dissipateTime);
@@ -18,7 +23,7 @@ function OnTriggerEnter(contact : Collider){
 		var react = contact.gameObject.GetComponent("Substance").reactive;
 		var other = contact.gameObject.GetComponent("Substance").id;
 	}
-	if(react != null){
+	if(react){
 		React(other);
 	}
 }
@@ -41,13 +46,16 @@ function React(reactant : int){
 	
 }
 
-function PhaseChange(heat : boolean){
-	if(heat){
-		Instantiate(heated, transform.position, transform.rotation);
+function TempChange(heat : float){
+	currentTemperature += heat;
+	if(currentTemperature > gasTransition){
+		
 	}
-	else if(!heat){
-		Instantiate(cooled, transform.position, transform.rotation);
+	else if (currentTemperature < solidTransition){
+	
 	}
-	Destroy(gameObject);
+}
+function PhaseChange(){
+	
 }
 @script RequireComponent(Rigidbody);
